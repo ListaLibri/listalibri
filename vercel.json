@@ -1,0 +1,26 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://listalibri.it/$1",
+      "has": [
+        {
+          "type": "host",
+          "value": "listalibri.com"
+        }
+      ],
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "destination": "https://listalibri.it/$1",
+      "has": [
+        {
+          "type": "host",
+          "value": "listalibri.app"
+        }
+      ],
+      "permanent": true
+    }
+  ]
+}
