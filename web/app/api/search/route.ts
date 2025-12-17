@@ -11,6 +11,16 @@ type Row = {
   CLASSE_DISPLAY: string;
 };
 
+function toSchoolResult(r: Row) {
+  return {
+    comune: r.DESCRIZIONECOMUNE,
+    provincia: r.PROVINCIA,
+    scuola: r.DENOMINAZIONESCUOLA,
+    codiceIstituto: r.CODICEISTITUTORIFERIMENTO,
+    codiceScuola: r.CODICESCUOLA,
+  };
+}
+
 function normalize(s: string): string {
   return (s ?? "")
     .toLowerCase()
@@ -141,21 +151,21 @@ const q = (searchParams.get("q") ?? searchParams.get("query") ?? "").trim();
     }
   }
 
-  // fallback ranking
-  const ranked = rows
-    .map((r) => ({ r, s: score(q, r) }))
-    .filter((x) => x.s > 0)
-    .sort((a, b) => b.s - a.s)
-    .slice(0, 10)
-    .map(({ r, s }) => ({
-      score: s,
-      comune: r.DESCRIZIONECOMUNE,
-      provincia: r.PROVINCIA,
-      scuola: r.DENOMINAZIONESCUOLA,
-      classe: r.CLASSE_DISPLAY,
-      codiceIstituto: r.CODICEISTITUTORIFERIMENTO,
-      codiceScuola: r.CODICESCUOLA,
-    }));
+  // fallback ranking (raggruppa per scuola; lo score serve solo per ordinare)
+const bestBySchool = new Map<string, { r: Row; s: number }>();
 
-  return Response.json({ results: ranked, mode: "RANKED" });
+for (const r of rows) {
+  const s = score(q, r);
+  if (s <= 0) continue;
+  const key = r.CODICESCUOLA;
+  const prev = bestBySchool.get(key);
+  if (!prev || s > prev.s) bestBySchool.set(key, { r, s });
+}
+
+const ranked = Array.from(bestBySchool.values())
+  .sort((a, b) => b.s - a.s)
+  .slice(0, 10)
+  .map(({ r }) => toSchoolResult(r));
+
+return Response.json({ results: ranked, mode: "RANKED" });
 }

@@ -3,11 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 
 type Result = {
-  score?: number;
   comune: string;
   provincia: string;
   scuola: string;
-  classe: string;
   codiceIstituto: string;
   codiceScuola: string;
 };
@@ -51,9 +49,7 @@ export default function CercaPage() {
   className="mt-4 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300"
  />
 
-      <div className="mt-3 text-xs text-slate-600">
-        {mode ? `Modalità: ${mode}` : " "}
-      </div>
+      <div className="mt-3" />
 
       <div className="mt-4 grid gap-3">
   {results.map((r, i) => (
@@ -70,18 +66,6 @@ export default function CercaPage() {
         <span className="font-medium text-slate-800">IST:</span>{" "}
         <span className="font-mono text-slate-800">{r.codiceIstituto}</span>
       </div>
-
-      {/* Classe + score */}
-      <div className="mt-3 flex items-center gap-2">
-        <span className="rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-800">
-          {r.classe}
-        </span>
-
-        {typeof r.score === "number" ? (
-          <span className="text-xs text-slate-600">score {r.score}</span>
-        ) : null}
-      </div>
-
       {/* Codice scuola */}
       <div className="mt-2 text-xs text-slate-600">
         Codice scuola:{" "}
