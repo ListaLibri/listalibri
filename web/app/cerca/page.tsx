@@ -54,8 +54,8 @@ export default function CercaPage() {
       <div className="mt-4 grid gap-3">
   {results.map((r, i) => (
     <div
-      key={`${r.codiceScuola}-${r.classe}-${i}`}
-      className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+      key={`${r.codiceScuola}-${i}`}
+className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
     >
       {/* Scuola */}
       <div className="text-base font-semibold text-slate-900">{r.scuola}</div>
